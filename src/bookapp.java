@@ -66,7 +66,7 @@ public class bookapp {
                         while(rs.next()){
                             String fetchBookName = rs.getString("bookname");
                             String fetchBookAuthor = rs.getString("bookauthor");
-                            // String fetchBookLanguage = rs.getString("language");
+                           // String fetchBookLanguage = rs.getString("language");
                             String fetchBookCategory = rs.getString("bookcategory");
                             String fetchBookDayCharge = rs.getString("book_rentprice");
 
@@ -117,6 +117,33 @@ public class bookapp {
                     }
 
                     break;
+                case 4:
+                    System.out.println("Update a book");
+                    System.out.println("Enter book name: ");
+                    bookName = input.next();
+
+                    System.out.println("Enter the Author Name to update: ");
+                    bookAuthor = input.next();
+                   // System.out.println("Enter the Book Language to update: ");
+                   // bookLanguage = input.next();
+                    System.out.println("Enter the Books Category to update: ");
+                    bookCategory = input.next();
+                    System.out.println("Enter the Books charge per day to update: ");
+                    bookDayCharge = input.nextInt();
+
+                    try {
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb", "root", "");
+                        String sql = "UPDATE `books` SET `bookauthor`='"+bookAuthor+"',`bookcategory`='"+bookCategory+"',`book_rentprice`='"+bookDayCharge+"' WHERE `bookname` = '"+bookName+"'";
+                        Statement stmt = con.createStatement();
+                        stmt.executeUpdate(sql);
+                        System.out.println("Data updated successfully.");
+                    }
+                    catch (Exception e){
+                        System.out.println(e);
+                    }
+
+                    break;
                 case 5:
                     System.out.println("Delete a book");
                     System.out.println("Enter the book name: ");
@@ -136,3 +163,7 @@ public class bookapp {
 
 
                     break;
+            }
+        }
+    }
+}
