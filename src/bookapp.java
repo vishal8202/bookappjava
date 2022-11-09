@@ -54,3 +54,33 @@ public class bookapp {
                     }
 
                     break;
+                case 2:
+                    System.out.println("View all Book");
+
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                        String sql ="SELECT `bookname`, `bookauthor`,  `bookcategory`, `book_rentprice` FROM `books` ";
+                        Statement stmt = con.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql);
+                        while(rs.next()){
+                            String fetchBookName = rs.getString("bookname");
+                            String fetchBookAuthor = rs.getString("bookauthor");
+                            // String fetchBookLanguage = rs.getString("language");
+                            String fetchBookCategory = rs.getString("bookcategory");
+                            String fetchBookDayCharge = rs.getString("book_rentprice");
+
+                            System.out.println("Book Name: "+fetchBookName);
+                            System.out.println("Author : "+fetchBookAuthor);
+                            //System.out.println("Book Language : "+fetchBookLanguage);
+                            System.out.println("Category: "+fetchBookCategory);
+                            System.out.println("Books charge/day : "+fetchBookDayCharge+"\n");
+
+
+                        }
+                    }
+                    catch (Exception e){
+                        System.out.println(e);
+                    }
+
+                    break;
