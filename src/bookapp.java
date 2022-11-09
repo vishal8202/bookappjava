@@ -144,3 +144,159 @@ public class bookapp {
                     }
 
                     break;
+                case 5:
+                    System.out.println("Delete a book");
+                    System.out.println("Enter the book name: ");
+                    bookName = input.next();
+
+                    try {
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb", "root", "");
+                        String sql = "DELETE FROM `books` WHERE `bookname` = '" +bookName+"'";
+                        Statement stmt = con.createStatement();
+                        stmt.executeUpdate(sql);
+                        System.out.println("Book deleted successfully.");
+                    }
+                    catch (Exception e){
+                        System.out.println(e);
+                    }
+
+
+                    break;
+                case 6:
+                    System.out.println("Search a book starting with a specific letter");
+                    System.out.println("Enter the first letter to search: ");
+                    String bookLetter = input.next();
+
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb", "root", "");
+                        String sql = "SELECT `bookname`, `bookauthor`,  `bookcategory`, `book_rentprice` FROM `books` WHERE `bookname` LIKE '"+bookLetter+"%'";
+
+
+                        Statement stmt = con.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql);
+                        while(rs.next()){
+                            String fetchBookName = rs.getString("bookname");
+                            String fetchBookAuthor = rs.getString("bookauthor");
+                            //String fetchBookLanguage = rs.getString("language");
+                            String fetchBookCategory = rs.getString("bookcategory");
+                            String fetchBookDayCharge = rs.getString("book_rentprice");
+
+                            System.out.println("Book Name: "+fetchBookName);
+                            System.out.println("Author : "+fetchBookAuthor);
+                            // System.out.println("Book Language : "+fetchBookLanguage);
+                            System.out.println("Category: "+fetchBookCategory);
+                            System.out.println("Books charge/day : "+fetchBookDayCharge+"\n");
+
+                        }
+
+                    }
+                    catch (Exception e){
+                        System.out.println(e);
+                    }
+
+
+                    break;
+                case 7:
+                    System.out.println("Display total books in each category");
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                        String sql ="SELECT COUNT(*) AS total, `bookcategory` FROM `books` GROUP BY `bookcategory`";
+                        Statement stmt = con.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql);
+                        //System.out.println("-------------------------------------");
+                        while(rs.next()){
+                            String fetchTotal = rs.getString("total");
+                            String fetchCategory = rs.getString("bookcategory");
+
+
+                            System.out.print("Total Books : "+fetchTotal+" |");
+                            System.out.print(" Category : "+fetchCategory+"\n");
+
+
+
+                        }
+                        //System.out.println("-------------------------------------");
+                    }
+                    catch (Exception e){
+                        System.out.println(e);
+                    }
+                    break;
+                case 8:
+                    System.out.println("View books in a specific category");
+                    System.out.println("Enter the category search: ");
+                    bookCategory = input.next();
+
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb", "root", "");
+                        String sql = "SELECT `bookname`, `bookauthor`, `book_rentprice` FROM `books` WHERE `bookcategory` = '"+bookCategory+"'";
+
+
+                        Statement stmt = con.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql);
+                        while(rs.next()){
+                            String fetchBookName = rs.getString("bookname");
+                            String fetchBookAuthor = rs.getString("bookauthor");
+                            //String fetchBookLanguage = rs.getString("language");
+                            String fetchBookDayCharge = rs.getString("book_rentprice");
+
+                            System.out.println("Book Name: "+fetchBookName);
+                            System.out.println("Author : "+fetchBookAuthor);
+                            //System.out.println("Book Language : "+fetchBookLanguage);
+                            System.out.println("Books charge/day : "+fetchBookDayCharge+"\n");
+
+                        }
+
+                    }
+                    catch (Exception e){
+                        System.out.println(e);
+                    }
+
+                    break;
+                case 9:
+                    System.out.println("Display the total amount in return date");
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb", "root", "");
+                        String sql = "SELECT i.user_id,i.book_id,i.issue_date,i.return_date,DATEDIFF(i.return_date,i.issue_date) AS datediff,DATEDIFF(i.return_date,i.issue_date)*b.`book_rentprice` AS amount from issue_book i JOIN books b ON i.book_id = b.id";
+
+                        Statement stmt = con.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql);
+                        while(rs.next()){
+                            String fetchUserId = rs.getString("user_id");
+                            String fetchBookId = rs.getString("book_id");
+                            String fetchIssueDate = rs.getString("issue_date");
+                            String fetchReturnDate = rs.getString("return_date");
+                            String fetchDateDiff = rs.getString("datediff");
+                            String fetchAmount = rs.getString("amount");
+
+                            System.out.print("User Id: "+fetchUserId+" | ");
+                            System.out.print(" Book Id : "+fetchBookId+" | ");
+                            System.out.print(" IssueDate : "+fetchIssueDate+" | ");
+                            System.out.print(" ReturnDate : "+fetchReturnDate+" | ");
+                            System.out.print(" DateDiff : "+fetchDateDiff+" | ");
+                            System.out.print(" Amount : "+fetchAmount+" | "+"\n");
+
+                        }
+
+                    }
+                    catch (Exception e){
+                        System.out.println(e);
+                    }
+
+
+                    break;
+                case 10:
+                    System.out.println("Exited Menu..");
+                    System.exit(0);
+
+
+
+
+            }
+        }
+    }
+}
